@@ -8,8 +8,8 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {RNCamera} from 'react-native-camera';
-import {connect} from 'react-redux';
-import {addItem} from './actions/item';
+// import {connect} from 'react-redux';
+// import {addItem} from './actions/item';
 
 class BarcodeInventory extends Component {
   state = {
@@ -18,11 +18,11 @@ class BarcodeInventory extends Component {
     value: 'Place Holder',
   };
   _onBarcodeScanned = (code) => {
-    if (code.data == 'SV1176694-LD') {
-      // console.log(this.props.names);
-      this.setState({compared: this.props.names});
-      //console.log(this.state.compared);
-    }
+    // if (code.data == 'SV1176694-LD') {
+    //   // console.log(this.props.names);
+    //   this.setState({compared: this.props.names});
+    //   //console.log(this.state.compared);
+    // }
     //this.setState({compared: this.props.names});
     //console.log(this.state.compared);
   };
@@ -34,54 +34,40 @@ class BarcodeInventory extends Component {
   render() {
     return (
       <View style={styles.mainContainer}>
-        <View>
-          <Text>testing</Text>
+        <View style={styles.camera}>
+          <RNCamera
+            ref={(cam) => (this.camera = cam)}
+            style={styles.box}
+            type={RNCamera.Constants.Type.back}
+            flashMode={RNCamera.Constants.FlashMode.on}
+            autoFocus="on"
+            onBarCodeRead={(code) => this._onBarcodeScanned(code)}
+          />
         </View>
-        <RNCamera
-          ref={(cam) => (this.camera = cam)}
-          style={styles.box}
-          type={RNCamera.Constants.Type.back}
-          flashMode={RNCamera.Constants.FlashMode.on}
-          autoFocus="on"
-          onBarCodeRead={(code) => this._onBarcodeScanned(code)}
-        />
-        <View style={styles.flatList}>
-          <FlatList
-            data={this.state.compared}
-            renderItem={(data) => (
-              <View>
-                <Text>{data.item.Name}</Text>
-                {/* <TouchableOpacity
+        <View style={styles.info}>
+          <View style={styles.flatList}>
+            <FlatList
+              data={this.state.compared}
+              renderItem={(data) => (
+                <View>
+                  <Text>{data.item.Name}</Text>
+                  {/* <TouchableOpacity
                     onPress={() => this.props.delete(data.item.key)}>
                     <Text>X</Text>s
                   </TouchableOpacity> */}
-              </View>
-            )}
+                </View>
+              )}
+            />
+          </View>
+          <TextInput
+            style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+            onChangeText={(text) => this.setState({value: text})}
+            value={this.state.value}
           />
-        </View>
-        <TextInput
-          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-          onChangeText={(text) => this.setState({value: text})}
-          value={this.state.value}
-        />
-        <TouchableOpacity
-          onPress={({compared: Name}) => this.onPressAdd({compared: Name})}>
-          <Text>ADD</Text>
-        </TouchableOpacity>
-
-        <View style={styles.result}>
-          <FlatList
-            data={this.props.items}
-            renderItem={(data) => (
-              <View>
-                <Text>{data.item.name}</Text>
-                {/* <TouchableOpacity
-                    onPress={() => this.props.delete(data.item.key)}>
-                    <Text>X</Text>s
-                  </TouchableOpacity> */}
-              </View>
-            )}
-          />
+          <TouchableOpacity
+            onPress={({compared: Name}) => this.onPressAdd({compared: Name})}>
+            <Text>ADD</Text>
+          </TouchableOpacity>
         </View>
       </View>
     );
@@ -93,16 +79,38 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
+    borderWidth: 3,
+    borderColor: '#666FFF',
+    backgroundColor: 'rgba(241,248,254, 1)',
   },
 
   box: {
-    backgroundColor: '#b22222',
-    borderWidth: 5,
-    borderColor: 'red',
-    width: '60%',
-    //height: '100%',
-    marginTop: '15%',
-    flex: 0.5,
+    // backgroundColor: '#b22222',
+    // borderWidth: 5,
+    // borderColor: 'red',
+    // width: '60%',
+    // //height: '100%',
+    // marginTop: '15%',
+    flex: 1,
+  },
+
+  info: {
+    width: '100%',
+    height: '45%',
+    backgroundColor: 'rgba(241,248,254, 1)',
+    borderWidth: 3,
+    borderColor: 'yellow',
+    flex: 1.75,
+    alignItems: 'center',
+  },
+
+  camera: {
+    backgroundColor: 'rgba(231,245,253, 1)',
+    borderWidth: 3,
+    borderColor: 'green',
+    width: '70%',
+    //marginTop: '15%',
+    flex: 1,
   },
 
   flatList: {
@@ -117,17 +125,17 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state) => {
-  return {
-    names: state.itemReducer.namesList,
-    items: state.itemReducer.itemList,
-  };
-};
+// const mapStateToProps = (state) => {
+//   return {
+//     names: state.itemReducer.namesList,
+//     items: state.itemReducer.itemList,
+//   };
+// };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    add: (item) => dispatch(addItem(item)),
-  };
-};
+// const mapDispatchToProps = (dispatch) => {
+//   return {
+//     add: (item) => dispatch(addItem(item)),
+//   };
+// };
 
-export default connect(mapStateToProps, mapDispatchToProps)(BarcodeInventory);
+export default BarcodeInventory;

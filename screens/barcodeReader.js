@@ -36,18 +36,28 @@ class BarcodeReader extends Component {
     const response = await axios.get(
       `https://jayasinghes-fuel-sensor-server-2812.zeet.app/Track/New`,
     );
-    response.data.map((d) => {
-      this.setState({nameList: d});
-    });
-    //console.log(this.state.nameList.CompanyName + ' Name');
+    // response.data.map((marker, index) => {
+    //   this.setState({nameList: index[0]});
+    //   //console.log({index});
+    //   //console.log({marker});
+    // });
+    // //console.log(this.state.nameList.id + ' id');
+
+    this.props.download(response.data);
     //sending data to redux
     //console.log(this.state.nameList);
-    this.props.download(this.state.nameList);
+    //this.props.download(this.state.nameList + 'dddd');
   }
 
   //after barcode scanned
   _onBarcodeScanned = (code) => {
     //this.setState({code});
+    this.props.names.map(
+      (index) => this.setState({nameList: index}),
+      //console.log({index}),
+      //console.log({marker}),
+    );
+    console.log(this.state.nameList + ' tutututututu');
     this.setState({item: code.data});
     this.handleIncrement();
   };
@@ -129,44 +139,7 @@ class BarcodeReader extends Component {
             Barcode Type: {this.state.code.type}
           </Text> */}
           <Text style={styles._txtStyle}>Barcode Data: {this.state.item}</Text>
-          {/* <View style={styles.qty}>
-            <Text style={styles._txtStyle}>Quantity: </Text>
-            {/* <TextInput
-              style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-              onChangeText={(text) => this.setState({qty: text})}
-              value={this.state.qty}
-              keyboardType={'number-pad'}
-            /> */}
-          {/* </View> */}
-          {/* <View>
-            <FlatList
-              data={this.props.items}
-              keyExtractor={(item, index) => item.key.toString()}
-              renderItem={(data) => (
-                <View>
-                  <Text>{data.item.name}</Text>
-                  <TouchableOpacity
-                    onPress={() => this.props.delete(data.item.key)}>
-                    <Text>X</Text>
-                  </TouchableOpacity>
-                </View>
-              )}
-            />
-          </View> */}
-          {/* <View>
-            <FlatList
-              data={this.props.names}
-              renderItem={(data) => (
-                <View>
-                  <Text>{data.item.Name}</Text>
-                  <TouchableOpacity
-                    onPress={() => this.props.delete(data.item.key)}>
-                    <Text>X</Text>
-                  </TouchableOpacity>
-                </View>
-              )}
-            />
-          </View> */}
+
           <View>
             <FlatList
               data={this.state.compared}
@@ -181,17 +154,6 @@ class BarcodeReader extends Component {
               )}
             />
           </View>
-          {/* <View style={styles.down}>
-            <FlatList
-              data={() => this.props.names}
-              //keyExtractor={(item, index) => item.key.toString()}
-              renderItem={(data) => (
-                <View>
-                  <Text>{data.item.name}</Text>
-                </View>
-              )}
-            />
-          </View> */}
         </View>
       </View>
     );
@@ -329,7 +291,7 @@ const mapDispatchToProps = (dispatch) => {
   //console.log(this.state.nameList)
   return {
     add: (item) => dispatch(addItem(item)),
-    download: (nameList) => dispatch(downloadData(nameList)),
+    download: (data) => dispatch(downloadData(data)),
     delete: (key) => dispatch(deleteItem(key)),
     compare: (item) => dispatch(compareData(item)),
   };

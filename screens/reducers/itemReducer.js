@@ -16,7 +16,7 @@ const initialState = {
 const itemReducer = (state = initialState, action) => {
   console.log(action.data);
   //console.log(this.state.itemList);
-  //console.log(this.state.initialState.namesList.name);
+  //console.log(this.state.namesList);
 
   switch (action.type) {
     case ADD_ITEM:
@@ -35,10 +35,10 @@ const itemReducer = (state = initialState, action) => {
     case DOWNLOAD_DATA:
       return {
         ...state,
-        namesList: state.namesList.concat({
-          Name: action.data.CompanyName,
+        namesList: state.namesList.concat(
+          action.data,
           //Email: action.data.Email
-        }),
+        ),
       };
     // case COMPARE_DATA:
     //   if (action.data == 'SV1176694-LD') {
